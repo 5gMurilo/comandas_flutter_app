@@ -28,7 +28,7 @@ class _ComandaDetailsState extends State<ComandaDetails> {
         child: CustomAppBar(
           iconButton: IconButton(
               onPressed: () {
-                Modular.to.navigate('/');
+                Modular.to.navigate('/home');
               },
               icon: Icon(Icons.arrow_back_ios_new)),
           title: 'Detalhes',
@@ -209,7 +209,7 @@ class _ComandaDetailsState extends State<ComandaDetails> {
             ),
             CustomButton(
               title: 'Excluir pedido',
-              navigatorUrl: '/',
+              navigatorUrl: '/home',
             )
           ],
         ),

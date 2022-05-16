@@ -14,7 +14,7 @@ class ComandaCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Modular.to.navigate('/comanda/${comanda.id}');
+        Modular.to.navigate('/comanda');
       },
       child: Container(
         child: Card(

@@ -1,10 +1,9 @@
-import 'package:comandas_app/controller/client/dio_client.dart';
 import 'package:comandas_app/controller/comandas_controller.dart';
-import 'package:comandas_app/controller/services/get_comandas_service.dart';
-import 'package:comandas_app/models/comanda_model.dart';
+import 'package:comandas_app/widgets/action_button.dart';
 import 'package:comandas_app/widgets/card.dart';
-import 'package:comandas_app/widgets/list_of_comandas.dart';
+import 'package:comandas_app/widgets/expandable_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -14,18 +13,7 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  final controller = ComandasController(
-    GetComandasService(
-      client: DioClient(),
-    ),
-  );
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    controller.fetchComandas();
-  }
+  final controller = Modular.get<ComandasController>();
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +47,27 @@ class _HomeWidgetState extends State<HomeWidget> {
               );
             }),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('clicou');
-        },
-        child: Icon(Icons.menu, color: Colors.black),
-        backgroundColor: Color.fromARGB(255, 216, 187, 83),
+      floatingActionButton: ExpandableFab(
+        distance: 112,
+        children: [
+          Actionbutton(
+            onPressed: () => print('salve'),
+            icon: Icon(Icons.print_rounded),
+          ),
+          Actionbutton(
+            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                content: Text(
+                  'adicionar pedido',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                ),
+              ),
+            ),
+            icon: Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }

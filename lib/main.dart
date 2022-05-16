@@ -18,6 +18,20 @@ class MainWidget extends StatelessWidget {
       title: _title,
       routeInformationParser: Modular.routeInformationParser,
       routerDelegate: Modular.routerDelegate,
+      theme: ThemeData(
+        colorScheme: ColorScheme(
+            brightness: Brightness.dark,
+            primary: Color.fromARGB(255, 22, 22, 22),
+            onPrimary: Color.fromARGB(255, 216, 187, 83),
+            secondary: Color.fromARGB(255, 57, 57, 57),
+            onSecondary: Colors.white,
+            error: Colors.red.shade600,
+            onError: Colors.white,
+            background: Color.fromARGB(255, 22, 22, 22),
+            onBackground: Color.fromARGB(255, 57, 57, 57),
+            surface: Color.fromARGB(255, 57, 57, 57),
+            onSurface: Colors.white),
+      ),
     );
   }
 }

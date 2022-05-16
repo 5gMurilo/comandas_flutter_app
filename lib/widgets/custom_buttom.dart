@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton(
-      {Key? key, required this.title, required this.navigatorUrl})
-      : super(key: key);
+  const CustomButton({
+    Key? key,
+    required this.title,
+    required this.navigatorUrl,
+  }) : super(key: key);
   final String title;
   final String navigatorUrl;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
