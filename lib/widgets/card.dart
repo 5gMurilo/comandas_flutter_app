@@ -6,15 +6,17 @@ class ComandaCard extends StatelessWidget {
   const ComandaCard({
     Key? key,
     required this.comanda,
+    required this.position,
   }) : super(key: key);
 
   final ComandaModel comanda;
+  final int position;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Modular.to.navigate('/comanda');
+        Modular.to.navigate('/comanda', arguments: position);
       },
       child: Container(
         child: Card(
@@ -62,7 +64,9 @@ class ComandaCard extends StatelessWidget {
                       Text(comanda.pronto ? 'Pronto' : 'Fazendo..',
                           style: TextStyle(
                               fontSize: 16,
-                              color: Color.fromARGB(255, 255, 17, 0))),
+                              color: comanda.pronto
+                                  ? Color.fromARGB(255, 26, 229, 9)
+                                  : Color.fromARGB(255, 255, 17, 0))),
                     ],
                   ),
                 ),

@@ -1,9 +1,12 @@
 import 'package:comandas_app/widgets/appbar.dart';
+import 'package:comandas_app/widgets/custom_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class EditInfos extends StatelessWidget {
-  const EditInfos({Key? key}) : super(key: key);
+  const EditInfos({required this.position, Key? key}) : super(key: key);
+
+  final int position;
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +17,34 @@ class EditInfos extends StatelessWidget {
         child: CustomAppBar(
           iconButton: IconButton(
               onPressed: () {
-                Modular.to.navigate('/comanda');
+                Modular.to.navigate('/comanda', arguments: position);
               },
               icon: Icon(Icons.arrow_back_ios_new)),
           title: 'Editar informações',
         ),
       ),
-      body: Column(
-        children: [
-          Image.network(
-              'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/91/4a/e7/914ae7aa-833b-f9ec-11b1-e9bcbc2f7ea8/artwork.jpg/1200x1200bf-60.jpg')
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(
+                children: [
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: InputDecoration(
+                      labelText: 'Nome do cliente',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

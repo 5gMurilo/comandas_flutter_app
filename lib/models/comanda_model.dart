@@ -1,6 +1,6 @@
 class ComandaModel {
   final String? id;
-  final dynamic detalhes;
+  final List<Map<dynamic, dynamic>> detalhes;
   final bool pronto;
   final double valorFinal;
   final String nomeCliente;

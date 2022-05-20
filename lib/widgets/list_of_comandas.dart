@@ -30,6 +30,7 @@ class _ComandasListState extends State<ComandasList> {
               final comanda = controller.fetchComandas();
               return ComandaCard(
                 comanda: controller.comandas.elementAt(index),
+                position: index,
               );
             },
           );

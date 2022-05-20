@@ -1,9 +1,16 @@
+import 'package:comandas_app/controller/comandas_controller.dart';
 import 'package:comandas_app/views/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:provider/provider.dart';
 
 void main(List<String> args) {
-  runApp(ModularApp(module: AppRoutes(), child: MainWidget()));
+  runApp(
+    ChangeNotifierProvider(
+      create: ((context) => Modular.get<ComandasController>()),
+      child: ModularApp(module: AppRoutes(), child: MainWidget()),
+    ),
+  );
 }
 
 const _title = "espetinho bdp";

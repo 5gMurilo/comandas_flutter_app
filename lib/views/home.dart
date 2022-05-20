@@ -1,9 +1,11 @@
 import 'package:comandas_app/controller/comandas_controller.dart';
+import 'package:comandas_app/models/comanda_model.dart';
 import 'package:comandas_app/widgets/action_button.dart';
 import 'package:comandas_app/widgets/card.dart';
 import 'package:comandas_app/widgets/expandable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:provider/provider.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -14,6 +16,12 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget> {
   final controller = Modular.get<ComandasController>();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.fetchComandas();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,22 +44,51 @@ class _HomeWidgetState extends State<HomeWidget> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: AnimatedBuilder(
-            animation: controller,
-            builder: (context, position) {
-              return ListView.builder(
-                itemCount: controller.comandas.length,
-                itemBuilder: (context, index) {
-                  final comanda = controller.comandas.elementAt(index);
-                  return ComandaCard(comanda: comanda);
+          animation: controller,
+          builder: (context, position) {
+            if (controller.comandas.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'Ainda não existem comandas a serem exibidas',
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Consumer<ComandasController>(
+                builder: (context, value, child) {
+                  return ListView.builder(
+                    itemCount: controller.comandas.length,
+                    itemBuilder: (context, index) {
+                      final comanda = controller.comandas.elementAt(index);
+                      return ComandaCard(
+                        comanda: comanda,
+                        position: index,
+                      );
+                    },
+                  );
                 },
               );
-            }),
+            }
+          },
+        ),
       ),
       floatingActionButton: ExpandableFab(
         distance: 112,
         children: [
           Actionbutton(
-            onPressed: () => print('salve'),
+            onPressed: () => controller.newComanda(ComandaModel(
+              detalhes: [
+                {'teste': 4},
+                {'teste2': 3}
+              ],
+              valorFinal: 20.0,
+              nomeCliente: 'Ivone',
+              pronto: false,
+            )),
             icon: Icon(Icons.print_rounded),
           ),
           Actionbutton(

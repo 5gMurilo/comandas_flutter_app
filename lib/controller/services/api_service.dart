@@ -1,12 +1,12 @@
-import 'package:comandas_app/controller/client/http_client.dart';
-import 'package:comandas_app/models/comanda_model.dart';
+import '../../models/comanda_model.dart';
+import '../client/http_client.dart';
 
 const _comandasURL = 'https://bdpcomandas-app.herokuapp.com/';
 
-class GetComandasService {
+class ApiService {
   final HttpClient client;
 
-  GetComandasService({required this.client});
+  ApiService(this.client);
 
   Future<List<ComandaModel>> getComanda() async {
     final response = await client.get(_comandasURL);
@@ -37,5 +37,14 @@ class GetComandasService {
     }
 
     return listReturn;
+  }
+
+  Future<void> newComanda(ComandaModel newComandaData) async {
+    await client.post(_comandasURL, {
+      'detalhes': newComandaData.detalhes,
+      'fechada': newComandaData.pronto,
+      'valor_final': newComandaData.valorFinal,
+      'nome_cliente': newComandaData.nomeCliente
+    });
   }
 }

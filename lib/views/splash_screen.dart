@@ -10,13 +10,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final _controller = Modular.get<ComandasController>();
-
   _navigateToHome() async {
-    await _controller.fetchComandas();
-
-    // await Future.delayed(Duration(milliseconds: 1500), () {});
-
+    await Future.delayed(Duration(milliseconds: 1500), () {});
     Modular.to.navigate('/home');
   }
 

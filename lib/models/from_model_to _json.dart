@@ -8,26 +8,14 @@ class FromModelToJson {
   FromModelToJson({required this.model});
 
   toJson() {
-    var json = jsonDecode(r'''
-    {
-      "detalhes": [
-        {
-          "espetinho de frango": 2
-        },
-        {
-          "espetinho de frango": 2
-        },
-        {
-          "espetinho de frango": 2
-        }
-      ],
-      "fechada": ${model.pronto},
-      "valor_final": ${model.valorFinal},
-      "nome_cliente": ${model.nomeCliente}
-    }
-''');
+    Map body = {
+      "detalhes": model.detalhes,
+      "fechada": model.pronto,
+      "valor_final": model.pronto,
+      "nome_cliente": model.nomeCliente
+    };
 
-    return json;
+    return body;
   }
 }
 

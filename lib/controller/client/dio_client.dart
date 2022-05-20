@@ -12,7 +12,7 @@ class DioClient implements HttpClient {
   }
 
   @override
-  Future<void> post(String url, ComandaModel newComandaData) async {
+  Future<void> post(String url, dynamic newComandaData) async {
     final postAction = await dio.post(url, data: newComandaData);
 
     print('${postAction.statusCode} - ${postAction.statusMessage}');

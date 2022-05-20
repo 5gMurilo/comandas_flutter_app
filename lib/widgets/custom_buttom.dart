@@ -5,14 +5,30 @@ class CustomButton extends StatelessWidget {
   const CustomButton({
     Key? key,
     required this.title,
-    required this.navigatorUrl,
+    this.navigatorUrl,
+    this.arguments,
+    this.function,
   }) : super(key: key);
   final String title;
-  final String navigatorUrl;
+  final String? navigatorUrl;
+  final dynamic arguments;
+  final Function? function;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Modular.to.navigate(navigatorUrl),
+      onTap: () {
+        if (navigatorUrl != null) {
+          if (function != null) {
+            function!();
+          } else {
+            arguments == null
+                ? Modular.to.navigate(navigatorUrl!)
+                : Modular.to.navigate('/editinfos', arguments: arguments);
+          }
+        } else {
+          function!();
+        }
+      },
       child: Container(
         width: double.infinity,
         alignment: Alignment.center,
