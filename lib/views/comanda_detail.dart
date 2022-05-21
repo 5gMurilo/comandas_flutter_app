@@ -1,5 +1,6 @@
 import 'package:comandas_app/controller/comandas_controller.dart';
 import 'package:comandas_app/widgets/appbar.dart';
+import 'package:comandas_app/widgets/change_status_switch.dart';
 import 'package:comandas_app/widgets/custom_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -18,13 +19,8 @@ class _ComandaDetailsState extends State<ComandaDetails> {
 
   @override
   Widget build(BuildContext context) {
-    bool testVal = controller.comandas.elementAt(widget.position).pronto;
-    const _tastes = [
-      'espetinho de frango',
-      'espetinho de carne',
-      'espetinho de linguiça'
-    ];
-
+    bool initialSwitchValue =
+        controller.comandas.elementAt(widget.position).pronto;
     var comanda = controller.comandas.elementAt(widget.position);
 
     print(comanda.detalhes);
@@ -144,85 +140,8 @@ class _ComandaDetailsState extends State<ComandaDetails> {
                     letterSpacing: 2.5,
                   ),
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'fazendo',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        letterSpacing: 2.5,
-                      ),
-                    ),
-                    Switch(
-                      value: testVal,
-                      activeColor: Color(0xFFD8BB53),
-                      onChanged: (value) {
-                        setState(() {});
-                        if (comanda.pronto != true) {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (_) => AlertDialog(
-                              title: Text('pedido'),
-                              content: Text(
-                                  'Deseja alterar o estado do pedido para pronto?'),
-                              actions: [
-                                TextButton(
-                                    onPressed: () async {
-                                      await controller.changeToDone(
-                                        value,
-                                        controller.comandas
-                                            .elementAt(widget.position)
-                                            .id!,
-                                      );
-                                      await controller.fetchComandas();
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('Sim')),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('não'),
-                                ),
-                              ],
-                              elevation: 20,
-                            ),
-                          );
-                        } else {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (_) => AlertDialog(
-                              title: Text('Ops!'),
-                              content: Text(
-                                  'Não é possível alterar o estado do produo'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('Ok'),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                    Text(
-                      'concluído',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        letterSpacing: 2.5,
-                      ),
-                    ),
-                  ],
-                )
+                SwitchStatus(
+                    switchValue: initialSwitchValue, position: widget.position),
               ],
             ),
             CustomButton(
@@ -232,7 +151,28 @@ class _ComandaDetailsState extends State<ComandaDetails> {
             ),
             CustomButton(
               title: 'Excluir pedido',
-              navigatorUrl: '/home',
+              function: () async {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text('Excluir pedido'),
+                    content: Text('deseja realmente excluir este pedido?'),
+                    actions: [
+                      TextButton(onPressed: () async{
+                        var id = controller.comandas.elementAt(widget.position).id!;
+                        await controller.deleteComanda(id);
+                        Navigator.pop(context);
+                        Modular.to.navigate('/home');
+                      }, child: Text('Sim')),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('Não')),
+                    ],
+                  ),
+                );
+              },
             )
           ],
         ),

@@ -29,8 +29,9 @@ class ComandasController extends ChangeNotifier {
     }
     notifyListeners();
   }
-
+  
   Future<void> changeToDone(bool value, String id) async {
+    //TODO: create file to this function
     try {
       var response = await client.dio.patch(
         'https://bdpcomandas-app.herokuapp.com/comanda/update/$id',
@@ -42,6 +43,15 @@ class ComandasController extends ChangeNotifier {
           : print('faiô');
     } catch (e) {
       print(e);
+    }
+  }
+  
+  Future<void> deleteComanda(String id) async{
+    try{
+      var response = await client.dio.delete('http://bdpcomandas-app.herokuapp.com/comanda/delete/$id');
+      response.statusCode == 200 ? print('deleted with success') : print('faiô -> ${response.statusCode}');
+    }catch(e){
+      print('error -> $e');
     }
   }
 }

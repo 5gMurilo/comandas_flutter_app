@@ -23,7 +23,7 @@ class CustomButton extends StatelessWidget {
           } else {
             arguments == null
                 ? Modular.to.navigate(navigatorUrl!)
-                : Modular.to.navigate('/editinfos', arguments: arguments);
+                : Modular.to.navigate(navigatorUrl!, arguments: arguments);
           }
         } else {
           function!();
