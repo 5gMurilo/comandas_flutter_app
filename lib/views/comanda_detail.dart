@@ -183,10 +183,11 @@ class _ComandaDetailsState extends State<ComandaDetails> {
                                     },
                                     child: Text('Sim')),
                                 TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('não')),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('não'),
+                                ),
                               ],
                               elevation: 20,
                             ),
