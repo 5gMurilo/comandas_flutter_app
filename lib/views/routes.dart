@@ -1,11 +1,11 @@
 import 'package:comandas_app/controller/client/dio_client.dart';
 import 'package:comandas_app/controller/comandas_controller.dart';
-import 'package:comandas_app/controller/services/get_comandas_service.dart';
-import 'package:comandas_app/controller/services/post_comandas_service.dart';
 import 'package:comandas_app/views/comanda_detail.dart';
 import 'package:comandas_app/views/edit_infos.dart';
 import 'package:comandas_app/views/home.dart';
+import 'package:comandas_app/views/new_comanda_form.dart';
 import 'package:comandas_app/views/splash_screen.dart';
+import 'package:comandas_app/widgets/styled_form_field.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppRoutes extends Module {
@@ -39,6 +39,11 @@ class AppRoutes extends Module {
           child: (context, args) => EditInfos(
             position: args.data,
           ),
+          transition: TransitionType.rightToLeftWithFade,
+        ),
+        ChildRoute(
+          '/newComanda',
+          child: (context, args) => NewComandaForm(appBarTitle: 'Nova comanda'),
           transition: TransitionType.rightToLeftWithFade,
         )
       ];

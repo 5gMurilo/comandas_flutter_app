@@ -1,5 +1,4 @@
 import 'package:comandas_app/widgets/appbar.dart';
-import 'package:comandas_app/widgets/custom_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 

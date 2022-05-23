@@ -80,29 +80,21 @@ class _HomeWidgetState extends State<HomeWidget> {
         distance: 112,
         children: [
           Actionbutton(
-            onPressed: () => controller.newComanda(ComandaModel(
-              detalhes: [
-                {'teste': 4},
-                {'teste2': 3}
-              ],
-              valorFinal: 20.0,
-              nomeCliente: 'Ivone',
-              pronto: false,
-            )),
-            icon: Icon(Icons.print_rounded),
+            onPressed: () => Modular.to.navigate('/newComanda'),
+            icon: Icon(Icons.add),
           ),
           Actionbutton(
             onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 content: Text(
-                  'adicionar pedido',
+                  'baixar relatório',
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.onPrimary),
                 ),
               ),
             ),
-            icon: Icon(Icons.add),
+            icon: Icon(Icons.print_rounded),
           ),
         ],
       ),

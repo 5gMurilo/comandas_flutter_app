@@ -30,16 +30,16 @@ class CustomButton extends StatelessWidget {
         }
       },
       child: Container(
-        width: double.infinity,
         alignment: Alignment.center,
         height: 60,
+        width: double.infinity,
         margin: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           color: Color(0xFF393939),
           boxShadow: const [
             BoxShadow(
                 color: Colors.black45,
-                spreadRadius: 5,
+                spreadRadius: 2,
                 blurRadius: 5,
                 offset: Offset.zero)
           ],
