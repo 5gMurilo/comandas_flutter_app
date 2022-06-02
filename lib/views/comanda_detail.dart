@@ -59,6 +59,7 @@ class _ComandaDetailsState extends State<ComandaDetails> {
               shrinkWrap: true,
               itemCount: comanda.detalhes.length,
               itemBuilder: (context, index) {
+                print(comanda.id);
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                   child: IntrinsicHeight(
@@ -159,8 +160,8 @@ class _ComandaDetailsState extends State<ComandaDetails> {
                     content: Text('deseja realmente excluir este pedido?'),
                     actions: [
                       TextButton(onPressed: () async{
-                        var id = controller.comandas.elementAt(widget.position).id!;
-                        await controller.deleteComanda(id);
+                        var id = comanda.id;
+                        await controller.deleteComanda(id!);
                         Navigator.pop(context);
                         Modular.to.navigate('/home');
                       }, child: Text('Sim')),

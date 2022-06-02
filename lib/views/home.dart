@@ -96,6 +96,10 @@ class _HomeWidgetState extends State<HomeWidget> {
             ),
             icon: Icon(Icons.print_rounded),
           ),
+          Actionbutton(
+            icon: Icon(Icons.fastfood_rounded),
+            onPressed: () => Modular.to.navigate('/foodsPage'),
+          ),
         ],
       ),
     );

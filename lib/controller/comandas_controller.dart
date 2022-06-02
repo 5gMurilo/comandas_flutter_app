@@ -2,13 +2,16 @@ import 'dart:developer';
 
 import 'package:comandas_app/controller/client/dio_client.dart';
 import 'package:comandas_app/controller/services/get_comandas_service.dart';
+import 'package:comandas_app/controller/services/get_products_service.dart';
 import 'package:comandas_app/controller/services/post_comandas_service.dart';
 import 'package:comandas_app/models/comanda_model.dart';
+import 'package:comandas_app/models/foods_model.dart';
 import 'package:flutter/material.dart';
 
 class ComandasController extends ChangeNotifier {
   final DioClient client;
   var comandas = <ComandaModel>[];
+  var foods = <FoodsModel>[];
 
   ComandasController(this.client);
 
@@ -29,7 +32,7 @@ class ComandasController extends ChangeNotifier {
     }
     notifyListeners();
   }
-  
+
   Future<void> changeToDone(bool value, String id) async {
     //TODO: create file to this function
     try {
@@ -45,13 +48,26 @@ class ComandasController extends ChangeNotifier {
       print(e);
     }
   }
-  
-  Future<void> deleteComanda(String id) async{
-    try{
-      var response = await client.dio.delete('http://bdpcomandas-app.herokuapp.com/comanda/delete/$id');
-      response.statusCode == 200 ? print('deleted with success') : print('faiô -> ${response.statusCode}');
-    }catch(e){
+
+  Future<void> deleteComanda(String id) async {
+    try {
+      var response = await client.dio
+          .delete('http://bdpcomandas-app.herokuapp.com/delete/pedido/$id');
+      response.statusCode == 200
+          ? print('deleted with success')
+          : print('faiô -> ${response.statusCode}');
+    } catch (e) {
       print('error -> $e');
     }
+  }
+
+  Future<void> fetchFoods() async {
+    try {
+        var service = GetProductsService(client: client);
+        foods = await service.getFoods();
+        notifyListeners();
+      } catch (e) {
+        print('error -> $e');
+      }
   }
 }

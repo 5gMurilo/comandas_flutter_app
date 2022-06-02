@@ -1,8 +1,10 @@
+import 'package:comandas_app/controller/comandas_controller.dart';
 import 'package:comandas_app/widgets/appbar.dart';
 import 'package:comandas_app/widgets/custom_buttom.dart';
 import 'package:comandas_app/widgets/styled_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:provider/provider.dart';
 
 class NewComandaForm extends StatefulWidget {
   const NewComandaForm({Key? key, required this.appBarTitle}) : super(key: key);
@@ -14,21 +16,21 @@ class NewComandaForm extends StatefulWidget {
 }
 
 class _NewComandaFormState extends State<NewComandaForm> {
-  var value = 0.0;
-  var items = [];
-  List<Map<String, int>> prodList = [];
+  final controller = Modular.get<ComandasController>();
+
+  var orderVal = 0.0;
+
+  var prodList = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    controller.fetchFoods();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var qtd = 0;
-    List<Map<String, double>> produtos = [
-      {'espetinho de kafta': 5.00},
-      {'espetinho de frango': 4.50},
-      {'espetinho de linguiça': 4.50},
-      {'Cerveja Itaipava': 4.50},
-      {'Cerveja Skol': 4.50},
-      {'Cerveja Brahma': 4.50},
-    ];
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 33, 33, 33),
@@ -55,62 +57,65 @@ class _NewComandaFormState extends State<NewComandaForm> {
                   'Itens do pedido',
                   style: TextStyle(fontSize: 20),
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: produtos.length,
-                  itemBuilder: (context, index) {
-                    var produto = produtos.elementAt(index);
-                    return Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              '${produto.keys.toString().replaceAll(
-                                  RegExp('([()])'), '')}',
-                            ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: Text(
-                              'R\$ ${produto.values.toString().replaceAll(
-                                  RegExp('([()])'), '')}',
-                            ),
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: Row(
-                              children: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      qtd++;
-                                      value += double.parse(produto.values.toString().replaceAll(RegExp('([()])'), ''));
-                                      items = [{index: qtd}];
-                                    });
-                                    print(items);
-                                  },
-                                  child: Text('+'),
+                Consumer(
+                  builder: (context, value, child) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: controller.foods.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  controller.foods.elementAt(index).nome,
                                 ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    if (value != 0) {
-                                      setState(() {
-                                        value -= double.parse(produto.values.toString().replaceAll(RegExp('([()])'), ''));
-                                      });
-                                    } else {
-                                      value = value;
-                                    }
-                                  },
-                                  child: Text('-'),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                child: Text(
+                                  'R\$ ${controller.foods.elementAt(index).valor}',
                                 ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: Row(
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          prodList.add(index);
+                                          orderVal += controller.foods
+                                              .elementAt(index)
+                                              .valor;
+                                        });
+                                      },
+                                      child: Text('+'),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        if (orderVal != 0) {
+                                          setState(() {
+                                            orderVal -= controller.foods
+                                                .elementAt(index)
+                                                .valor;
+                                          });
+                                        } else {
+                                          orderVal = orderVal;
+                                        }
+                                      },
+                                      child: Text('-'),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
@@ -124,13 +129,25 @@ class _NewComandaFormState extends State<NewComandaForm> {
                 ),
                 Center(
                   child: Text(
-                    'R\$ $value',
+                    'R\$ $orderVal',
                     style: TextStyle(fontSize: 22),
                   ),
                 ),
-                CustomButton(title: 'Enviar pedido', function: () {
-                  print('$prodList');
-                },),
+                CustomButton(
+                  title: 'Enviar pedido',
+                  function: () {
+                    var quantity = [];
+                    var ofIndex = [];
+                    for (var element in prodList) {
+                      if (ofIndex.isEmpty) {
+                        ofIndex.add(element);
+                        quantity.add(1);
+                        //TODO: se o elemento se repete adicionar mais um na posição referente ao indice do produto na lista ofIndex.
+                        //TODO: se o elemento já existir dentro o array ofIndex ignorar.
+                      }
+                    }
+                  },
+                ),
               ],
             ),
           ),

@@ -2,8 +2,10 @@ import 'package:comandas_app/controller/client/dio_client.dart';
 import 'package:comandas_app/controller/comandas_controller.dart';
 import 'package:comandas_app/views/comanda_detail.dart';
 import 'package:comandas_app/views/edit_infos.dart';
+import 'package:comandas_app/views/foods.dart';
 import 'package:comandas_app/views/home.dart';
 import 'package:comandas_app/views/new_comanda_form.dart';
+import 'package:comandas_app/views/new_product.dart';
 import 'package:comandas_app/views/splash_screen.dart';
 import 'package:comandas_app/widgets/styled_form_field.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -44,6 +46,16 @@ class AppRoutes extends Module {
         ChildRoute(
           '/newComanda',
           child: (context, args) => NewComandaForm(appBarTitle: 'Nova comanda'),
+          transition: TransitionType.rightToLeftWithFade,
+        ),
+        ChildRoute(
+          '/foodsPage',
+          child: (context, args) => Foods(),
+          transition: TransitionType.rightToLeftWithFade,
+        ),
+        ChildRoute(
+          '/newProduct',
+          child: (context, args) => NewProduct(),
           transition: TransitionType.rightToLeftWithFade,
         )
       ];
