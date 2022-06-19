@@ -1,5 +1,4 @@
 import 'package:comandas_app/controller/comandas_controller.dart';
-import 'package:comandas_app/models/comanda_model.dart';
 import 'package:comandas_app/widgets/action_button.dart';
 import 'package:comandas_app/widgets/card.dart';
 import 'package:comandas_app/widgets/expandable_fab.dart';

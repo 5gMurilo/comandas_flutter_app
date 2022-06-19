@@ -4,6 +4,7 @@ import 'package:comandas_app/controller/client/dio_client.dart';
 import 'package:comandas_app/controller/services/get_comandas_service.dart';
 import 'package:comandas_app/controller/services/get_products_service.dart';
 import 'package:comandas_app/controller/services/post_comandas_service.dart';
+import 'package:comandas_app/controller/services/post_products_service.dart';
 import 'package:comandas_app/models/comanda_model.dart';
 import 'package:comandas_app/models/foods_model.dart';
 import 'package:flutter/material.dart';
@@ -63,11 +64,25 @@ class ComandasController extends ChangeNotifier {
 
   Future<void> fetchFoods() async {
     try {
-        var service = GetProductsService(client: client);
-        foods = await service.getFoods();
-        notifyListeners();
-      } catch (e) {
-        print('error -> $e');
+      var service = GetProductsService(client: client);
+      foods = await service.getFoods();
+      notifyListeners();
+    } catch (e) {
+      print('error -> $e');
+    }
+  }
+
+  Future<void> newFood(FoodsModel food) async {
+    try {
+      final _service = PostProductService(client: client);
+      var response = await _service.newProduct(food);
+
+      if (response == true) {
+        fetchFoods();
       }
+      notifyListeners();
+    } catch (e) {
+      print('$e');
+    }
   }
 }

@@ -1,6 +1,5 @@
 import 'package:comandas_app/controller/client/http_client.dart';
 import 'package:comandas_app/models/foods_model.dart';
-import 'package:comandas_app/views/foods.dart';
 
 const _url = 'https://bdpcomandas-app.herokuapp.com/prods';
 

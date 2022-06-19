@@ -1,9 +1,8 @@
 import 'package:comandas_app/models/categories.dart';
 import 'package:comandas_app/widgets/appbar.dart';
+import 'package:comandas_app/widgets/custom_buttom.dart';
 import 'package:comandas_app/widgets/styled_form_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class NewProduct extends StatefulWidget {
@@ -15,6 +14,8 @@ class NewProduct extends StatefulWidget {
 
 class _NewProductState extends State<NewProduct> {
   String _gValue = Categories.bebida;
+  String nomeProduto = "";
+  String valorProduto = "";
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,13 @@ class _NewProductState extends State<NewProduct> {
         child: Form(
           child: Column(
             children: [
-              StyledFormField(labelTitle: 'Nome do produto'),
+              StyledFormField(
+                  labelTitle: 'Nome do produto',
+                  onChange: (value) {
+                    setState(() {
+                      nomeProduto = value ?? "";
+                    });
+                  }),
               Column(
                 children: [
                   ListTile(
@@ -77,9 +84,48 @@ class _NewProductState extends State<NewProduct> {
                       },
                     ),
                   ),
+                  ListTile(
+                    title: const Text('Outros'),
+                    leading: Radio(
+                      value: Categories.outros,
+                      groupValue: _gValue,
+                      activeColor: Theme.of(context).colorScheme.onPrimary,
+                      onChanged: (String? value) {
+                        setState(() {
+                          _gValue = value!;
+                        });
+                      },
+                    ),
+                  ),
                 ],
               ),
-              StyledFormField(labelTitle: 'valor'),
+              StyledFormField(
+                labelTitle: 'valor',
+                onChange: (value) {
+                  setState(() {
+                    valorProduto = value ?? "";
+                  });
+                },
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                child: CustomButton(
+                  title: 'Cadastrar novo produto',
+                  function: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        content: Text(
+                          '$nomeProduto - ${_gValue.toString()} - R\$$valorProduto',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:comandas_app/controller/comandas_controller.dart';
+import 'package:comandas_app/models/foods_model.dart';
 import 'package:comandas_app/widgets/appbar.dart';
 import 'package:comandas_app/widgets/custom_buttom.dart';
 import 'package:comandas_app/widgets/styled_form_field.dart';
@@ -20,17 +21,16 @@ class _NewComandaFormState extends State<NewComandaForm> {
 
   var orderVal = 0.0;
 
-  var prodList = [];
   @override
   void initState() {
-    // TODO: implement initState
     controller.fetchFoods();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var qtd = 0;
+    List<FoodsModel> prods = [];
+    List<Map<int, int>> quant = [];
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 33, 33, 33),
@@ -83,32 +83,32 @@ class _NewComandaFormState extends State<NewComandaForm> {
                               Flexible(
                                 flex: 2,
                                 child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
                                         setState(() {
-                                          prodList.add(index);
-                                          orderVal += controller.foods
-                                              .elementAt(index)
-                                              .valor;
+                                          prods.add(controller.foods
+                                              .elementAt(index));
+                                          print(prods.last.id);
+                                          //ao adicionar, pegar como referência o id e usar como chave, sendo o valor desta chave a quantidade do produto
                                         });
                                       },
                                       child: Text('+'),
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        if (orderVal != 0) {
-                                          setState(() {
-                                            orderVal -= controller.foods
-                                                .elementAt(index)
-                                                .valor;
-                                          });
+                                        if (1 != 0) {
+                                          setState(() {});
                                         } else {
                                           orderVal = orderVal;
                                         }
                                       },
                                       child: Text('-'),
                                     ),
+                                    Text(
+                                        '${quant.isEmpty ? 0 : quant[index]} x'),
                                   ],
                                 ),
                               )
@@ -135,18 +135,7 @@ class _NewComandaFormState extends State<NewComandaForm> {
                 ),
                 CustomButton(
                   title: 'Enviar pedido',
-                  function: () {
-                    var quantity = [];
-                    var ofIndex = [];
-                    for (var element in prodList) {
-                      if (ofIndex.isEmpty) {
-                        ofIndex.add(element);
-                        quantity.add(1);
-                        //TODO: se o elemento se repete adicionar mais um na posição referente ao indice do produto na lista ofIndex.
-                        //TODO: se o elemento já existir dentro o array ofIndex ignorar.
-                      }
-                    }
-                  },
+                  function: () {},
                 ),
               ],
             ),

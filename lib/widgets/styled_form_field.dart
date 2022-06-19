@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class StyledFormField extends StatefulWidget {
-  const StyledFormField({Key? key, required this.labelTitle, this.width})
+  const StyledFormField(
+      {Key? key, required this.labelTitle, this.width, this.onChange})
       : super(key: key);
 
   final String labelTitle;
   final double? width;
-
+  final Function(String?)? onChange;
   @override
   State<StyledFormField> createState() => _StyledFormFieldState();
 }
@@ -21,6 +22,7 @@ class _StyledFormFieldState extends State<StyledFormField> {
       margin: EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
         cursorColor: Theme.of(context).colorScheme.onPrimary,
+        onChanged: widget.onChange,
         decoration: InputDecoration(
           label: Text(
             widget.labelTitle,
