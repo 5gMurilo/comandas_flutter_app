@@ -1,4 +1,7 @@
+import 'package:comandas_app/controller/client/dio_client.dart';
+import 'package:comandas_app/controller/services/post_products_service.dart';
 import 'package:comandas_app/models/categories.dart';
+import 'package:comandas_app/models/foods_model.dart';
 import 'package:comandas_app/widgets/appbar.dart';
 import 'package:comandas_app/widgets/custom_buttom.dart';
 import 'package:comandas_app/widgets/styled_form_field.dart';
@@ -112,17 +115,39 @@ class _NewProductState extends State<NewProduct> {
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                 child: CustomButton(
                   title: 'Cadastrar novo produto',
-                  function: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        content: Text(
-                          '$nomeProduto - ${_gValue.toString()} - R\$$valorProduto',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary),
+                  function: () async {
+                    var model = FoodsModel(
+                        nome: nomeProduto,
+                        categoria: _gValue,
+                        valor: double.parse(valorProduto));
+                    var response = PostProductService(client: DioClient())
+                        .newProduct(model);
+
+                    if (response == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          content: Text(
+                            '$nomeProduto - ${_gValue.toString()} - R\$$valorProduto',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary),
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          content: Text(
+                            'Não foi possível inserir o produto, consulte o desenvolvedor',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary),
+                          ),
+                        ),
+                      );
+                    }
                   },
                 ),
               )
