@@ -1,7 +1,7 @@
 import '../../models/comanda_model.dart';
 import '../client/http_client.dart';
 
-const _comandasURL = 'https://bdpcomandas-app.herokuapp.com/';
+const _comandasURL = 'https://bdpcomandas.up.railway.app/api/';
 
 class ApiService {
   final HttpClient client;

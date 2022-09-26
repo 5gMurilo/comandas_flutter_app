@@ -1,7 +1,7 @@
 import 'package:comandas_app/controller/client/http_client.dart';
 import 'package:comandas_app/models/foods_model.dart';
 
-const _url = 'https://bdpcomandas-app.herokuapp.com/prods';
+const _url = 'https://bdpcomandas.up.railway.app/api/products';
 
 class GetProductsService {
   final HttpClient client;
@@ -19,8 +19,8 @@ class GetProductsService {
         FoodsModel(
           id: response.elementAt(i)['_id'],
           categoria: response.elementAt(i)['categoria'],
-          nome: response.elementAt(i)['produto'],
-          valor: double.tryParse(response.elementAt(i)['valor'].toString())!,
+          nome: response.elementAt(i)['nome'],
+          valor: double.tryParse(response.elementAt(i)['preco'].toString())!,
         ),
       );
     }
