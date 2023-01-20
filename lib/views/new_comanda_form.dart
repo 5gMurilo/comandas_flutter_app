@@ -1,4 +1,5 @@
 import 'package:comandas_app/controller/comandas_controller.dart';
+import 'package:comandas_app/models/cartItem.dart';
 import 'package:comandas_app/models/foods_model.dart';
 import 'package:comandas_app/widgets/appbar.dart';
 import 'package:comandas_app/widgets/custom_buttom.dart';
@@ -8,10 +9,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:provider/provider.dart';
 
 class NewComandaForm extends StatefulWidget {
-  const NewComandaForm({Key? key, required this.appBarTitle}) : super(key: key);
+  const NewComandaForm({Key? key, required this.appBarTitle, required this.foodsQuantity}) : super(key: key);
 
   final String appBarTitle;
-
+  final int foodsQuantity;
   @override
   State<NewComandaForm> createState() => _NewComandaFormState();
 }
@@ -19,18 +20,61 @@ class NewComandaForm extends StatefulWidget {
 class _NewComandaFormState extends State<NewComandaForm> {
   final controller = Modular.get<ComandasController>();
 
+  List<int> quantity = List.generate(4, (index) => 0,growable: true);
+  List<CartItem> prods = [];
+  
+  void handleQuantity(int position) {
+    setState(() {
+      quantity[position]++;
+    });
+  }
+
+  void handleAddToCart({
+      required FoodsModel food,
+      required int buttonIndex,
+    }) {
+      var indexOf =
+          prods.indexWhere((element) => element.food.nome == food.nome);
+
+      if (indexOf < 0) {
+        handleQuantity(buttonIndex);
+        prods.add(CartItem(food: food, quantity:quantity[buttonIndex]));
+      } else {
+        handleQuantity(buttonIndex);
+        prods[indexOf] =
+            CartItem(food: food, quantity: quantity[buttonIndex]);
+      }
+    }
+
   var orderVal = 0.0;
+
+  void setCartValue(double newValue) { 
+    setState(() {
+      orderVal = newValue;
+    });
+  }
 
   @override
   void initState() {
-    controller.fetchFoods();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<FoodsModel> prods = [];
-    List<Map<int, int>> quant = [];
+    
+
+    void handleCartValue(List<CartItem> items){
+      double newValue = 0.0;
+
+
+      for (var prod in items) {
+        newValue += (prod.food.valor * prod.quantity);
+      }
+
+      print(newValue);
+
+      setCartValue(newValue);
+    }
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 33, 33, 33),
@@ -47,7 +91,7 @@ class _NewComandaFormState extends State<NewComandaForm> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
           child: Form(
             child: Column(
               children: [
@@ -55,7 +99,7 @@ class _NewComandaFormState extends State<NewComandaForm> {
                 Divider(color: Colors.white, height: 10, thickness: 1.25),
                 Text(
                   'Itens do pedido',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 22),
                 ),
                 Consumer(
                   builder: (context, value, child) {
@@ -72,43 +116,63 @@ class _NewComandaFormState extends State<NewComandaForm> {
                                 flex: 2,
                                 child: Text(
                                   controller.foods.elementAt(index).nome,
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(fontWeight: FontWeight.w500),
                                 ),
                               ),
                               Flexible(
                                 flex: 1,
+                                fit: FlexFit.tight,
                                 child: Text(
                                   'R\$ ${controller.foods.elementAt(index).valor}',
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(fontWeight: FontWeight.w500),
                                 ),
                               ),
                               Flexible(
                                 flex: 2,
+                                fit: FlexFit.tight,
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceAround,
                                   children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          prods.add(controller.foods
-                                              .elementAt(index));
-                                          print(prods.last.id);
-                                          //ao adicionar, pegar como referência o id e usar como chave, sendo o valor desta chave a quantidade do produto
-                                        });
-                                      },
-                                      child: Text('+'),
+                                    SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          handleAddToCart(
+                                              food: controller.foods
+                                                  .elementAt(index),
+                                              buttonIndex: index);
+
+                                          handleCartValue(prods);
+                                        },
+                                        child: Text('+'),
+                                      ),
                                     ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        if (1 != 0) {
-                                          setState(() {});
-                                        } else {
-                                          orderVal = orderVal;
-                                        }
-                                      },
-                                      child: Text('-'),
+                                    SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          if (1 != 0) {
+                                            setState(() {});
+                                          } else {
+                                            orderVal = orderVal;
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          foregroundColor:
+                                              Color.fromARGB(255, 255, 94, 0),
+                                          textStyle: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        child: Text('-'),
+                                      ),
                                     ),
-                                    Text(
-                                        '${quant.isEmpty ? 0 : quant[index]} x'),
+                                    Text("${quantity.elementAt(index)}"),
                                   ],
                                 ),
                               )

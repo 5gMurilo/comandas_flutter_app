@@ -1,7 +1,7 @@
 import 'package:comandas_app/controller/client/http_client.dart';
 import '../../models/comanda_model.dart';
 
-const _comandasURL = 'https://bdpcomandas-app.herokuapp.com/post/novaComanda';
+const _comandasURL = 'https://bdp-comandas-api.vercel.app/api/post/comanda';
 
 class PostComandasService {
   final HttpClient client;

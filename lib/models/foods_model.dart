@@ -10,4 +10,11 @@ class FoodsModel {
     required this.categoria,
     required this.valor,
   });
+
+
+  @override
+  String toString() {
+
+    return nome;
+  }
 }

@@ -45,7 +45,7 @@ class AppRoutes extends Module {
         ),
         ChildRoute(
           '/newComanda',
-          child: (context, args) => NewComandaForm(appBarTitle: 'Nova comanda'),
+          child: (context, args) => NewComandaForm(appBarTitle: 'Nova comanda', foodsQuantity: 4),
           transition: TransitionType.rightToLeftWithFade,
         ),
         ChildRoute(

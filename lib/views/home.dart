@@ -20,6 +20,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   void initState() {
     super.initState();
     controller.fetchComandas();
+    controller.fetchFoods();
   }
 
   @override

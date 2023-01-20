@@ -1,7 +1,7 @@
 import 'package:comandas_app/controller/client/http_client.dart';
 import 'package:comandas_app/models/foods_model.dart';
 
-const _url = 'https://bdpcomandas.up.railway.app/api/products';
+const _url = 'https://bdp-comandas-api.vercel.app/api/products';
 
 class GetProductsService {
   final HttpClient client;
