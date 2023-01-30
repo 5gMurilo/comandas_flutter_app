@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:comandas_app/controller/comandas_controller.dart';
 import 'package:comandas_app/models/cartItem.dart';
 import 'package:comandas_app/models/foods_model.dart';
@@ -9,7 +11,9 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:provider/provider.dart';
 
 class NewComandaForm extends StatefulWidget {
-  const NewComandaForm({Key? key, required this.appBarTitle, required this.foodsQuantity}) : super(key: key);
+  const NewComandaForm(
+      {Key? key, required this.appBarTitle, required this.foodsQuantity})
+      : super(key: key);
 
   final String appBarTitle;
   final int foodsQuantity;
@@ -20,9 +24,9 @@ class NewComandaForm extends StatefulWidget {
 class _NewComandaFormState extends State<NewComandaForm> {
   final controller = Modular.get<ComandasController>();
 
-  List<int> quantity = List.generate(4, (index) => 0,growable: true);
+  List<int> quantity = List.generate(4, (index) => 0, growable: true);
   List<CartItem> prods = [];
-  
+
   void handleQuantity(int position) {
     setState(() {
       quantity[position]++;
@@ -30,25 +34,44 @@ class _NewComandaFormState extends State<NewComandaForm> {
   }
 
   void handleAddToCart({
-      required FoodsModel food,
-      required int buttonIndex,
-    }) {
-      var indexOf =
-          prods.indexWhere((element) => element.food.nome == food.nome);
+    required FoodsModel food,
+    required int buttonIndex,
+  }) {
+    var indexOf = prods.indexWhere((element) => element.food.nome == food.nome);
 
-      if (indexOf < 0) {
-        handleQuantity(buttonIndex);
-        prods.add(CartItem(food: food, quantity:quantity[buttonIndex]));
+    if (indexOf < 0) {
+      handleQuantity(buttonIndex);
+      prods.add(CartItem(food: food, quantity: quantity[buttonIndex]));
+    } else {
+      handleQuantity(buttonIndex);
+      prods[indexOf] = CartItem(food: food, quantity: quantity[buttonIndex]);
+    }
+  }
+
+  void handleRemoveFromCart({
+    required FoodsModel food,
+    required int buttonIndex,
+  }) {
+    var index = prods.indexWhere((element) => element.food.nome == food.nome);
+
+    if (index >= 0) {
+      if (prods.elementAt(index).quantity > 1) {
+        setState(() {
+          quantity[buttonIndex]--;
+        });
+        prods[index] = CartItem(food: food, quantity: quantity[buttonIndex]);
       } else {
-        handleQuantity(buttonIndex);
-        prods[indexOf] =
-            CartItem(food: food, quantity: quantity[buttonIndex]);
+        setState(() {
+          quantity[buttonIndex] = 0;
+        });
+        prods.removeAt(index);
       }
     }
+  }
 
   var orderVal = 0.0;
 
-  void setCartValue(double newValue) { 
+  void setCartValue(double newValue) {
     setState(() {
       orderVal = newValue;
     });
@@ -61,11 +84,8 @@ class _NewComandaFormState extends State<NewComandaForm> {
 
   @override
   Widget build(BuildContext context) {
-    
-
-    void handleCartValue(List<CartItem> items){
+    void handleCartValue(List<CartItem> items) {
       double newValue = 0.0;
-
 
       for (var prod in items) {
         newValue += (prod.food.valor * prod.quantity);
@@ -156,11 +176,11 @@ class _NewComandaFormState extends State<NewComandaForm> {
                                       height: 40,
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          if (1 != 0) {
-                                            setState(() {});
-                                          } else {
-                                            orderVal = orderVal;
-                                          }
+                                          handleRemoveFromCart(
+                                              buttonIndex: index,
+                                              food: controller.foods
+                                                  .elementAt(index));
+                                          handleCartValue(prods);
                                         },
                                         style: ElevatedButton.styleFrom(
                                           foregroundColor:
